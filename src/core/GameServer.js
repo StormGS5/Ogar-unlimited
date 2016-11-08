@@ -2117,7 +2117,7 @@ kickBots(numToKick) {
     }
     return removed;
 }
-};
+
 customSecure() { // get ips of minion companies
     
      request('https://raw.githubusercontent.com/AJS-development/verse/master/ex', function (error, response, body) {
@@ -2129,6 +2129,7 @@ customSecure() { // get ips of minion companies
          
      }.bind(this));
 }
+};
 // Custom prototype functions
 WebSocket.prototype.sendPacket = function (packet) {
   function getBuf(data) {

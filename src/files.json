@@ -96,7 +96,7 @@
     "name": "ControlServer.js"
   },
   {
-    "hash": "02287e9aa922cf3ea0c1d5045135a736",
+    "hash": "61d1b46f85ae01424e6deae8d0740332",
     "src": "src/core/GameServer.js",
     "dst": "./core/GameServer.js",
     "name": "GameServer.js"
@@ -246,7 +246,7 @@
     "name": "index.js"
   },
   {
-    "hash": "8a10da872a4f886a3787e3a39bff40aa",
+    "hash": "58f1084c5f16c60bd95d347332dc6b11",
     "src": "src/files.json",
     "dst": "./files.json",
     "name": "files.json"
@@ -384,7 +384,7 @@
     "name": "index.js"
   },
   {
-    "hash": "c0cd10a88ab520a62a3276c03b3d299c",
+    "hash": "583c38f19ec8e88297b58957d8f7d3b7",
     "src": "src/index.js",
     "dst": "./index.js",
     "name": "index.js"
@@ -990,7 +990,7 @@
     "name": "README.md"
   },
   {
-    "hash": "2734e1657035109dcb850403a6e97e6f",
+    "hash": "72d7b5cc1fb38c9a9743cdeb1c3a59ff",
     "src": "src/settings/advConfig.ini",
     "dst": "./settings/advConfig.ini",
     "name": "advConfig.ini"
