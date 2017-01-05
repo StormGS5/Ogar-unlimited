@@ -1165,12 +1165,8 @@ getChatName(player) {
               player.name = player.name.substr(n + 1);
             }
           } else if (player.name.substr(0, 1) == "[") {
-            // Premium Skin
-            let n = player.name.indexOf("]");
-            if (n != -1) {
-
-              player.premium = ':http://' + player.name.substr(1, n - 1);
-              player.name = player.name.substr(n + 1);
+  
+              player.name = "Invalid Skin";
             }
           }
         }
