@@ -1167,7 +1167,7 @@ getChatName(player) {
           } else if (player.name.substr(0, 1) == "[") {
   
               player.name = "Invalid Skin";
-            }
+            
           }
         }
   // getters/setters
