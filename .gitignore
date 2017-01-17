@@ -32,3 +32,12 @@ node_modules
 src/.settings/.jsdtscope
 src/.settings/org.eclipse.wst.jsdt.ui.superType.container
 src/.settings/org.eclipse.wst.jsdt.ui.superType.name
+
+#intellj
+.idea
+
+#generated files
+highscores.txt
+banned.txt
+opbyip.txt
+filesTemp.json

@@ -1,3 +1,10 @@
+### License (original found at https://github.com/OgarProject/Ogar/blob/master/LICENSE.md)
+
+>----------------------------------------------------------------------------------------------------
+
+Devin Ryan wanted this license in this work although it is completely different from his work. Still though, the credit belongs to the AJS-dev group even though legally (and unfairly) it belongs to Devin. So thats that.
+>----------------------------------------------------------------------------------------------------
+
 Copyright 2015 Devin Ryan
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,3 +18,5 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+>----------------------------------------------------------------------------------------------------

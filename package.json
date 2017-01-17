@@ -1,25 +1,32 @@
 {
-  "name": "Ogar",
-  "version": "1.0.0",
+  "name": "Ogar_Unlimited",
+  "version": "17.0.0",
   "description": "Open source Agar.io server",
   "main": "src/index.js",
+  "engines": {
+    "node": "5.9.0"
+  },
   "dependencies": {
-    "ws": "latest",
-    "request": "latest"
+    "async": "1.5.2",
+    "collections": "3.0.0",
+    "glob": "7.0.3",
+    "md5-file": "2.0.4",
+    "request": "2.72.0",
+    "ws": "1.1.0"
   },
   "devDependencies": {},
   "scripts": {
     "test": "node src/build.js",
-    "start" : "sudo node src/index.js"
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
-    "url":" https://github.com/OgarProject/Ogar"
+    "url": "https://github.com/AJS-development/Ogar-unlimited"
   },
-  "author": "Devin Ryan <devin@forairan.com> (http://devin.codes/)",
+  "author": "AJS-development",
   "license": "Apache License 2.0",
   "bugs": {
-    "url": "https://github.com/OgarProject/Ogar/issues"
+    "url": "https://github.com/AJS-development/Ogar-unlimited/issues"
   },
-  "homepage": "https://github.com/OgarProject/Ogar"
+  "homepage": "https://github.com/AJS-development/Ogar-unlimited"
 }

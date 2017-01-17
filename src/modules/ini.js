@@ -1,3 +1,4 @@
+
 exports.parse = exports.decode = decode;
 exports.stringify = exports.encode = encode;
 
@@ -6,7 +7,7 @@ exports.unsafe = unsafe;
 
 var eol = process.platform === "win32" ? "\r\n" : "\n";
 
-function encode(obj, opt) {
+function encode (obj, opt) {
     var children = [],
         out = "";
 
@@ -22,13 +23,14 @@ function encode(obj, opt) {
 
     var separator = " = ";
 
-    Object.keys(obj).forEach(function(k, _, __) {
+    Object.keys(obj).forEach(function (k, _, __) {
         var val = obj[k];
         if (val && Array.isArray(val)) {
             val.forEach(function(item) {
                 out += safe(k + "[]") + separator + safe(item) + "\n";
             });
-        } else if (val && typeof val === "object") {
+        }
+        else if (val && typeof val === "object") {
             children.push(k);
         } else {
             out += safe(k) + separator + safe(val) + eol;
@@ -39,7 +41,7 @@ function encode(obj, opt) {
         out = "[" + safe(opt.section) + "]" + eol + out;
     }
 
-    children.forEach(function(k, _, __) {
+    children.forEach(function (k, _, __) {
         var nk = dotSplit(k).join('\\.');
         var section = (opt.section ? opt.section + "." : "") + nk;
         var child = encode(obj[k], {
@@ -55,16 +57,16 @@ function encode(obj, opt) {
     return out;
 }
 
-function dotSplit(str) {
+function dotSplit (str) {
     return str.replace(/\1/g, '\u0002LITERAL\\1LITERAL\u0002')
         .replace(/\\\./g, '\u0001')
-        .split(/\./).map(function(part) {
+        .split(/\./).map(function (part) {
             return part.replace(/\1/g, '\\.')
                 .replace(/\2LITERAL\\1LITERAL\2/g, '\u0001');
         });
 }
 
-function decode(str) {
+function decode (str) {
     var out = {},
         p = out,
         state = "START",
@@ -73,7 +75,7 @@ function decode(str) {
         lines = str.split(/[\r\n]+/g),
         section = null;
 
-    lines.forEach(function(line, _, __) {
+    lines.forEach(function (line, _, __) {
         if (!line || line.match(/^\s*[;#]/)) {
             return;
         }
@@ -105,24 +107,34 @@ function decode(str) {
 
         // safeguard against resetting a previously defined
         // array by accidentally forgetting the brackets
-        if (isInt(value)) {
-            p[key] = parseInt(value);
+        if (isNaN(value)) {
+            if (value == 'true') { // Booleans
+                p[key] = true;
+            } else if (value == 'false') {
+                p[key] = false;
+            } else {
+                p[key] = value;
+            }
         } else {
-            p[key] = parseFloat(value);
+            if (isInt(value)) {
+                p[key] = parseInt(value);
+            } else {
+                p[key] = parseFloat(value);
+            }  
         }
     });
 
     // {a:{y:1},"a.b":{x:2}} --> {a:{y:1,b:{x:2}}}
     // use a filter to return the keys that have to be deleted.
-    Object.keys(out).filter(function(k, _, __) {
+    Object.keys(out).filter(function (k, _, __) {
         if (!out[k] || typeof out[k] !== "object" || Array.isArray(out[k])) return false
-            // see if the parent section is also an object.
-            // if so, add it to that, and mark this one for deletion
+        // see if the parent section is also an object.
+        // if so, add it to that, and mark this one for deletion
         var parts = dotSplit(k),
             p = out,
             l = parts.pop(),
             nl = l.replace(/\\\./g, '.');
-        parts.forEach(function(part, _, __) {
+        parts.forEach(function (part, _, __) {
             if (!p[part] || typeof p[part] !== "object") {
                 p[part] = {};
             }
@@ -133,22 +145,30 @@ function decode(str) {
         }
         p[nl] = out[k];
         return true;
-    }).forEach(function(del, _, __) {
+    }).forEach(function (del, _, __) {
         delete out[del];
     });
 
     return out;
 }
 
-function isQuoted(val) {
-    return (val.charAt(0) === "\"" && val.slice(-1) === "\"") || (val.charAt(0) === "'" && val.slice(-1) === "'");
+function isQuoted (val) {
+    return (val.charAt(0) === "\"" && val.slice(-1) === "\"")
+        || (val.charAt(0) === "'" && val.slice(-1) === "'");
 }
 
-function safe(val) {
-    return (typeof val !== "string" || val.match(/[=\r\n]/) || val.match(/^\[/) || (val.length > 1 && isQuoted(val)) || val !== val.trim()) ? JSON.stringify(val) : val.replace(/;/g, '\\;').replace(/#/g, "\\#");
+function safe (val) {
+    return (typeof val !== "string"
+             || val.match(/[=\r\n]/)
+             || val.match(/^\[/)
+             || (val.length > 1
+                 && isQuoted(val))
+             || val !== val.trim())
+        ? JSON.stringify(val)
+        : val.replace(/;/g, '\\;').replace(/#/g, "\\#");
 }
 
-function unsafe(val, doUnesc) {
+function unsafe (val, doUnesc) {
     val = (val || "").trim();
     if (isQuoted(val)) {
         // remove the single quotes before calling JSON.parse

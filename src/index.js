@@ -1,88 +1,48 @@
-// Imports
-var Commands = require('./modules/CommandList');
-var GameServer = require('./GameServer');
-
+'use strict';
+const Readline = require('readline');
+const VERSION = '17.7.0';
+// require('./cpu.js').init('./data')
+const Multiverse = require('./core/Multiverse');
+let multiverse = new Multiverse(VERSION);
+//throw error
 // Init variables
-var showConsole = true;
-
-// Start msg
-console.log("\u001B[33m                                        _ _       _              _ ");
-console.log("                                       | (_)     (_)_           | |");
-console.log("  ___   ____  ____  ____    _   _ ____ | |_ ____  _| |_  ____ _ | |");
-console.log(" / _ \\ / _  |/ _  |/ ___)  | | | |  _ \\| | |    \\| |  _)/ _  ) || |");
-console.log("| |_| ( ( | ( ( | | |      | |_| | | | | | | | | | | |_( (/ ( (_| |");
-console.log(" \\___/ \\_|| |\\_||_|_|       \\____|_| |_|_|_|_|_|_|_|\\___)____)____|");
-console.log("      (_____|                                                      \u001B[0m");
-
-console.log("\x1b[32m[Game] Ogar Unlimited - An open source Agar.io server implementation");
-console.log("[Game] By The AJS development team\x1b[0m");
-console.log("[Game] Server version is 10.0.0");
-var request = require('request');
-request('https://raw.githubusercontent.com/AJS-development/verse/master/msg', function(error, response, body) {
-        if (!error && response.statusCode == 200) {
-            if (body.replace('\n', '') != "") {
-
-                console.log("\x1b[32m[Console] We recieved a world-wide message!: " + body.replace('\n', '') + "\x1b[0m");
-            }
-        } else {
-            console.log("[Console] Could not connect to servers. Aborted checking for updates and messages");
-        }
-    })
-    // Handle arguments
-process.argv.forEach(function(val) {
-    if (val == "--noconsole") {
-        showConsole = false;
-    } else if (val == "--help") {
-        console.log("Proper Usage: node index.js");
-        console.log("    --noconsole         Disables the console");
-        console.log("    --help              Help menu.");
-        console.log("");
-    }
+let showConsole = true;
+process.stdout.write("\u001b[2J\u001b[0;0H");
+// Handle arguments
+process.argv.forEach(function (val) {
+  if (val == "--noconsole") {
+    showConsole = false;
+  } else if (val == "--help") {
+    console.log("Proper Usage: node index.js");
+    console.log("    --noconsole         Disables the console");
+    console.log("    --help              Help menu.");
+    console.log("    --expose-gc         Enables garbage collection")
+    console.log("");
+  }
 });
-
-// Run Ogar
-var gameServer = new GameServer();
-gameServer.start();
-// Add command handler
-gameServer.commands = Commands.list;
-// Initialize the server console
-if (showConsole) {
-    var readline = require('readline');
-    var in_ = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-    setTimeout(prompt, 100);
+if (global.gc) {
+    global.gc();
+} else {
+    console.log('[\x1b[34mINFO\x1b[0m] Garbage collection unavailable.  Pass --expose-gc '
+      + 'when launching node to enable garbage collection.(memory leak)');
 }
 
-// Console functions
+// There is no stopping an exit so clean up
+// NO ASYNC CODE HERE - only use SYNC or it will not happen
+process.on('exit', (code) => {
+  console.log("[\x1b[34mINFO\x1b[0m] OgarUnlimited terminated with code: " + code);
+  multiverse.stop();
+});
 
-function prompt() {
-    in_.question(">", function(str) {
-        parseCommands(str);
-        return prompt(); // Too lazy to learn async
-    });
-};
+// init/start the control server
+multiverse.init();
+setTimeout(function() {multiverse.start()},1500);
 
-function parseCommands(str) {
-    // Log the string
-    gameServer.log.onCommand(str);
-
-    // Don't process ENTER
-    if (str === '')
-        return;
-
-    // Splits the string
-    var split = str.split(" ");
-
-    // Process the first string value
-    var first = split[0].toLowerCase();
-
-    // Get command function
-    var execute = gameServer.commands[first];
-    if (typeof execute != 'undefined') {
-        execute(gameServer, split);
-    } else {
-        console.log("[Console] Invalid Command, try \u001B[33mhelp\u001B[0m for a list of commands.");
-    }
-};
+// Initialize the server console
+if (showConsole) {
+  let streamsInterface = Readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  setTimeout(multiverse.prompt(streamsInterface), 100);
+}

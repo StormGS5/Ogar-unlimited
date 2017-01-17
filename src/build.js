@@ -1,10 +1,10 @@
 var Commands = require('./modules/CommandList');
-var GameServer = require('./GameServer');
+var Multiverse = require('./core/Multiverse');
 
-var gameServer = new GameServer();
+var Multiverse = new Multiverse('1.0.0');
 
-setTimeout(function() {
-	process.exit(0);
+setTimeout(function () {
+  process.exit(0);
 }, 60000);
 
 process.exit(0);

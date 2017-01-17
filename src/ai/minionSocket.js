@@ -1,33 +1,31 @@
 // A fake socket for bot players
 
-function minionSocket(gameServer) {
-    this.server = gameServer;
+function MinionSocket(gameServer) {
+  this.server = gameServer;
 }
 
-module.exports = minionSocket;
+module.exports = MinionSocket;
 
 // Override
 
-minionSocket.prototype.sendPacket = function(packet) {
-    // Fakes sending a packet
-    return;
+MinionSocket.prototype.sendPacket = function (packet) {
+  // Fakes sending a packet
+
 };
 
-minionSocket.prototype.close = function(error) {
-    // Removes the bot
-    var len = this.playerTracker.cells.length;
-    for (var i = 0; i < len; i++) {
-        var cell = this.playerTracker.cells[0];
-
-        if (!cell) {
-            continue;
-        }
-
-        this.server.removeNode(cell);
+MinionSocket.prototype.close = function (error) {
+  // Removes the bot
+  var self = this;
+  this.playerTracker.cells.forEach(function (cell) {
+    // todo why are we null checking cell? seems like unneeded defensive programming
+    if (cell) {
+      self.server.removeNode(cell);
     }
+  });
 
-    var index = this.server.clients.indexOf(this);
-    if (index != -1) {
-        this.server.clients.splice(index, 1);
-    }
+  var index = this.server.clients.indexOf(this);
+  if (index != -1) {
+    // todo splice is slow, can we do this better?
+    this.server.clients.splice(index, 1);
+  }
 };

@@ -1,3 +1,7 @@
 language: node_js
 node_js:
-  - "stable"
+  - "5.9.0"
+
+script:
+  cd src;
+  node build.js
